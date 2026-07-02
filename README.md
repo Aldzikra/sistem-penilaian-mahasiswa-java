@@ -15,9 +15,9 @@ Aplikasi desktop sederhana untuk mengelola data nilai mahasiswa. Proyek ini dibu
 * `view` : Desain interface/tampilan UI (`MenuUtama.java`, `FormNilai.java`, dll).
 
 ## 🛠️ Tech Stack & Tools
-* **Bahasa:** Java (JDK 8 ke atas)
+* **Bahasa:** Java (JDK 26)
 * **IDE:** Apache NetBeans
-* **Database:** MySQL (XAMPP / Laragon)
+* **Database:** MySQL (XAMPP)
 
 ## 🏃 Cara Menjalankan Project
 1. Clone repositori ini ke lokal:
