@@ -5,6 +5,8 @@
 package com.mycompany.datanilai.view;
 
 import com.mycompany.datanilai.controller.NilaiController;
+import com.mycompany.datanilai.model.MahasiswaItem;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +23,11 @@ public class FormNilai extends javax.swing.JFrame {
         initComponents();
         controller = new NilaiController();
         controller.tampilData(tblNilai);
+        refreshTable();
+    }
+    
+    public void refreshTable(){
+        controller.tampilData(tblNilai);
     }
 
     /**
@@ -35,6 +42,9 @@ public class FormNilai extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblNilai = new javax.swing.JTable();
+        btnTambah = new javax.swing.JButton();
+        btnUbah = new javax.swing.JButton();
+        btnHapus = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,6 +63,15 @@ public class FormNilai extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblNilai);
 
+        btnTambah.setText("Tambah");
+        btnTambah.addActionListener(this::btnTambahActionPerformed);
+
+        btnUbah.setText("Ubah");
+        btnUbah.addActionListener(this::btnUbahActionPerformed);
+
+        btnHapus.setText("Hapus");
+        btnHapus.addActionListener(this::btnHapusActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,21 +83,81 @@ public class FormNilai extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(44, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnTambah)
+                            .addComponent(btnUbah)
+                            .addComponent(btnHapus))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(btnTambah)
+                        .addGap(46, 46, 46)
+                        .addComponent(btnUbah)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnHapus)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        // TODO add your handling code here:
+        int barisTerpilih = tblNilai.getSelectedRow();
+        
+        if (barisTerpilih == -1){
+            JOptionPane.showMessageDialog(this, "Silahkan Pilih data terlebih dahulu");
+            return;
+        }
+        
+        String nim = tblNilai.getValueAt(barisTerpilih, 0).toString();
+        int idNilai = Integer.parseInt(tblNilai.getValueAt(barisTerpilih, 2).toString());
+        String kdMk = tblNilai.getValueAt(barisTerpilih, 3).toString();
+        double nilaiLama = Double.parseDouble(tblNilai.getValueAt(barisTerpilih, 4).toString());
+        
+        FormUbahNilai formUbah = new FormUbahNilai(this, idNilai, nim, kdMk, nilaiLama);
+        formUbah.setLocationRelativeTo(this);
+        formUbah.setVisible(true);
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
+        // TODO add your handling code here:
+        FormTambahNilai form = new FormTambahNilai(this);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
+    }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        int barisTerpilih = tblNilai.getSelectedRow();
+        
+        if (barisTerpilih == -1 ){
+            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang akan dihapus");
+            return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin ingin menghapus data ini?", "Konfirmasi hapus", JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION){
+            int idNilai = Integer.parseInt(tblNilai.getValueAt(barisTerpilih, 2).toString());
+            
+            controller.hapusData(idNilai);
+            
+            refreshTable();
+        }
+    }//GEN-LAST:event_btnHapusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -106,6 +185,9 @@ public class FormNilai extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHapus;
+    private javax.swing.JButton btnTambah;
+    private javax.swing.JButton btnUbah;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblNilai;
